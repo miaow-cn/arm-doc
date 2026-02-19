@@ -150,3 +150,46 @@ CLZ X0, X1  // X0 = count of leading zero bits in X1
 ![image-20260219134004296](./05-Instructions.assets/image-20260219134004296.png)
 
 > Note: `REV32` applies only to 64-bit registers
+
+### Conditional instructions
+
+condition codes:
+
+![image-20260219140320094](./05-Instructions.assets/image-20260219140320094.png)
+
+The A64 instruction set does not support conditional execution for every instruction. The instructions types which read the condition flags are:
+
+- Add/subtract with carry
+
+- Conditional select
+
+  ```assembly
+  CSEL X0, X1, X2, EQ   // X0 = X1 if EQ else X2
+  CSINC X0, X1, X2, NE  // X0 = X1 if NE else X2 + 1
+  CSINV X0, X1, X2, MI   // X0 = X1 if MI else ~X2
+  CSNEG X0, X1, X2, LE   // X0 = X1 if LE else -X2
+  ```
+
+- Conditional set
+
+  ```assembly
+  CSET X0, HS           // X0 = 1 if HS else 0
+  CSETM X0, CC          // X0 = -1 if CC else 0
+  ```
+
+- Conditional calculate
+
+  ```assembly
+  CINC X0, X1, CS       // X0 = X1 + 1 if CS else X1
+  CINV X0, X1, PL       // X0 = ~X1 if PL else X1
+  CNEG X0, X1, LT       // X0 = -X1 if LT else X1
+  ```
+
+- Conditional compare
+
+  ```assembly
+  CCMP X0, X1, #2, VS  // NZCV = (X0, X1 compare result) if VS else 2
+  CCMN X0, #5, #3, LS  // NZCV = (X0, -5 compare result) if LS else 3
+  ```
+
+> Note:  FCSEL and FCCMP instructions are available for floating point registers.
