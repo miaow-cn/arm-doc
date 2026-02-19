@@ -105,3 +105,48 @@ ASR W0, W1, W2  // W0 = (s64)W1 >> (u8)W2[4:0]
 LSL W0, W1, #5  // W0 = (u32)W1 << 5
 LSR X0, X1, X2  // X0 = (u32)X1 >> (u8)X2[5:0]
 ```
+
+### Bitfield and byte manipulation
+
+`SXTB`, `SXTH`, `SXTW`, `UXTB`, `UXTH` extend a byte, halfword, or word to register size (32bit or 64bit).
+
+>  Note the source is always a W register. The  destination of `SXTW` must be an X register.
+
+For example:
+
+```assembly
+SXTB X0, W1  // X0 = (s64)(s8)W1
+SXTH W0, W1  // W0 = (s32)(s16)W1
+SXTW X0, W1  // X0 = (s64)(s32)W1
+
+UXTB X0, W1  // X0 = (u64)(u32)W1
+UXTH X0, W1  // X0 = (u64)(u16)W1
+```
+
+`BFI` copies a bitfield of bits from the least significant bits of the source register to specified bit position of the destination register.
+
+`UBFIZ` is similar to `BFI`, but sets the all other destination bits to zero.
+
+`SBFIZ`  is similar to `BFI`, but sets the destination bits below the bitfield to zero, and the bits above the bitfield to a copy of the most significant bit of the bitfield.
+
+`BFXIL` copies a bitfield of bits starting from the specified bit position in the source register to the least significant bits of the destination register.
+
+`UBFX` is similar to `BFXIL`, but sets all other destination bits to zero.
+
+`SBFX` is similar to `BFXIL`, but sets all other destination bits to a copy of the most significant bit of the bitfield.
+
+![image-20260219131448588](./05-Instructions.assets/image-20260219131448588.png)
+
+`BFC`  sets a bitfield to zero. `BFC X0, #3, #4` is equal to `BFI X0, XZR, #3, #4`
+
+`CLZ` count leading zero bits in a register:
+
+```assembly
+CLZ X0, X1  // X0 = count of leading zero bits in X1
+```
+
+`RBIT` reverse all bits, `REV` reverse the byte order of a register, there are also `REV16`, `REV32`:
+
+![image-20260219134004296](./05-Instructions.assets/image-20260219134004296.png)
+
+> Note: `REV32` applies only to 64-bit registers
